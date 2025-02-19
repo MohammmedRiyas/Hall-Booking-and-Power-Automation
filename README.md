@@ -1,77 +1,103 @@
-# Hall-Booking-and-Power-Automation
-The Room Booking and Power Automation System is an innovative solution designed to optimize energy usage and automate the power supply in rooms based on user needs. The system combines the concepts of room booking, power management, and IoT (Internet of Things) automation to provide a seamless user experience.
+# Hall Booking and Power Automation System
 
-Users can scan a QR code located in a room to book power for a specific duration. Once the booking is made, the system powers the room via a relay connected to an ESP32-based controller. It provides an efficient way to manage electricity consumption, improve energy efficiency, and reduce unnecessary power wastage by turning off the power after the set duration.
+## Overview
+The **Hall Booking and Power Automation System** is an innovative solution designed to optimize energy usage and automate the power supply in rooms based on user needs. The system integrates room booking, power management, and IoT automation to provide a seamless user experience.
 
-## Core Features:
-### Room Booking via QR Code:
+Users can scan a **QR code** in a room to book power for a specific duration. Once booked, the system activates power via a relay connected to an **ESP32-based controller** and automatically turns it off after the set duration, improving energy efficiency and reducing unnecessary power wastage.
 
-Each room is assigned a unique QR code that users can scan using a smartphone app.
-The app allows users to set the duration for power usage.
-The system checks the availability of the room (power availability) and grants the user control over the power for the set duration.
-### Power Control:
+---
+## Features
+### **Room Booking via QR Code**
+- Each room has a **unique QR code**.
+- Users scan the QR code using a mobile app.
+- The app allows users to set a **power duration**.
+- The system checks room availability and grants power access for the set duration.
 
-The system uses an ESP32 Ethernet Shield connected to a relay and a buzzer. The relay controls the power supply to the room (typically connected to lights, air conditioning, or other electrical devices).
-The ESP32 communicates via MQTT protocol over Ethernet to ensure reliable communication between the server, mobile app, and the device in the room.
-### Time-based Power Management:
+### **Automated Power Control**
+- Uses **ESP32 with an Ethernet Shield** to communicate with a relay and buzzer.
+- Controls power supply for devices like **lights, air conditioning, and electrical appliances**.
+- Communicates via the **MQTT protocol over Ethernet** to ensure reliable communication between the server, mobile app, and the device.
 
-Once the power is enabled, the system tracks the set time. A countdown is displayed to the user.
-10-minute warning alarm: A buzzer connected to the ESP32 will sound an alarm when the remaining time reaches 10 minutes, alerting users to prepare for the power cut-off.
-Once the booking time expires, the system automatically disconnects the power by switching off the relay, conserving energy.
-### Device Communication:
+### **Time-Based Power Management**
+- Power is enabled for the booked duration and a **countdown timer** is displayed.
+- **10-minute warning buzzer:** Alerts users when only 10 minutes remain before power cutoff.
+- Power is **automatically disconnected** after the booked duration ends.
 
-The ESP32 communicates with the central server using MQTT (Message Queuing Telemetry Transport), a lightweight messaging protocol ideal for IoT devices. This ensures the system can efficiently handle multiple devices and users at the same time with minimal network overhead.
-Communication is done over Ethernet, ensuring a stable and reliable connection, even in environments with limited Wi-Fi coverage.
-### OTA Firmware Updates:
+### **Device Communication**
+- Uses **MQTT (Message Queuing Telemetry Transport)** for efficient, low-latency communication.
+- Works over **Ethernet** for a stable and reliable connection, avoiding Wi-Fi issues.
 
-The ESP32 device supports Over-the-Air (OTA) firmware updates to ensure that the system can be updated remotely, without the need for physical access to the devices.
-This feature enables easy updates for bug fixes, security patches, or new features.
-### Hardware Components:
-ESP32 Ethernet Shield: Acts as the core controller, responsible for receiving MQTT messages and controlling the relay. The Ethernet shield ensures stable and fast connectivity.
-Relay Module: Used to control the electrical power to the room (turning on or off lights, fans, AC, etc.).
-Buzzer: Provides an audible alarm to indicate when there are 10 minutes left before the power cutoff or when the power is about to be turned off.
-Ethernet Communication: The ESP32 communicates via a wired Ethernet connection to reduce latency and improve reliability compared to Wi-Fi in environments where Wi-Fi might be unreliable.
-### Software Features:
-#### Mobile App:
+### **OTA Firmware Updates**
+- Supports **Over-the-Air (OTA) updates**, allowing remote firmware updates for bug fixes, security patches, and new features.
 
-The mobile app allows users to scan the QR code and set the power duration.
-The app communicates with the backend server via MQTT, allowing users to receive updates on the remaining time and power status in real-time.
-The app can be developed for both Android and iOS platforms.
-#### Backend Server:
+---
+## Hardware Requirements
+- **ESP32 with Ethernet Shield** (Core controller)
+- **Relay Module** (Power control)
+- **Buzzer** (Alarm for 10-minute warning and power cutoff)
+- **Ethernet Communication** (Wired connection for stability)
+- **Smartphone with QR Code Scanner** (For booking power)
 
-The backend manages room availability, booking records, and user requests.
-It also pushes updates to the ESP32 devices in real-time, such as power status and countdown information.
-The server will keep track of the duration for which power is booked and send the appropriate MQTT message to disconnect the power once the time expires.
-#### MQTT Broker:
+---
+## Software Components
+### **Mobile App**
+- Allows users to **scan QR codes** and book power.
+- Communicates with the backend server via **MQTT**.
+- Displays **real-time power status and countdown timer**.
+- Available for **Android and iOS**.
 
-The MQTT broker acts as the intermediary between the mobile app, backend server, and ESP32 devices.
-It ensures messages are reliably delivered and can handle multiple devices simultaneously.
-### Workflow:
-#### Scanning QR Code:
+### **Backend Server**
+- Manages **room availability, bookings, and user requests**.
+- Sends real-time updates to **ESP32 devices**.
+- Keeps track of power duration and automatically **disconnects power when time expires**.
 
-The user enters the room and scans the QR code displayed on the door or wall using the app.
-The app prompts the user to select the duration for which they need power (e.g., 30 minutes, 1 hour, etc.).
-The app sends this request to the server via MQTT.
+### **MQTT Broker**
+- Acts as an intermediary between **mobile app, backend server, and ESP32 devices**.
+- Ensures **reliable message delivery** with minimal network overhead.
 
-#### Power Booking and Confirmation:
+---
+## System Workflow
+### **1. Scanning QR Code**
+- Users scan the room's **QR code** using the mobile app.
+- Select the **duration** for power usage (e.g., 30 min, 1 hour, etc.).
+- The request is sent to the server via **MQTT**.
 
-The server checks the availability of power and confirms the booking. A message is sent to the ESP32 device in the room to switch on the power for the specified duration.
-The power is supplied to the room via the relay.
+### **2. Power Booking and Confirmation**
+- The **server checks power availability** and confirms the booking.
+- A message is sent to the **ESP32 device** to activate the relay and turn on the power.
 
-#### Time Management:
+### **3. Time Management**
+- The app displays a **countdown timer**.
+- When **10 minutes remain**, the **buzzer activates** as a warning.
 
-Once the power is on, the app provides a countdown timer to the user.
-10-minute alarm: As the time nears expiration, the buzzer activates, signaling the user that they have 10 minutes left.
-#### Power Cutoff:
+### **4. Power Cutoff**
+- After the booking time ends, the **ESP32 automatically turns off the relay**, cutting power.
+- The user receives a notification via the **mobile app**.
 
-After the set duration ends, the ESP32 automatically turns off the relay, cutting the power to the room.
-The user is notified via the app that the power has been turned off.
-#### OTA Updates:
+### **5. OTA Updates**
+- If updates are available, the ESP32 firmware can be updated **remotely**.
 
-If there are any updates for the system, the ESP32 can be updated remotely using the OTA firmware update functionality.
+---
+## Benefits
+### **Energy Efficiency**
+- Prevents unnecessary power usage by ensuring power is **only available when needed**.
 
-### Benefits:
-Energy Efficiency: By ensuring that power is only available when needed and turning off automatically after the set time, the system reduces energy wastage.
-Convenience: Users can easily book power using a simple app, and they receive timely alerts before the power is turned off.
-Reliability: The use of Ethernet for communication ensures more stable and reliable performance compared to Wi-Fi, which is essential for critical power management tasks.
-Scalability: Multiple rooms and devices can be managed simultaneously with the MQTT protocol, allowing the system to scale to larger buildings or campuses.
+### **Convenience**
+- Users can easily **book power using a mobile app**.
+- Get **timely alerts** before power cutoff.
+
+### **Reliability**
+- Uses **Ethernet** instead of Wi-Fi for **stable, uninterrupted communication**.
+
+### **Scalability**
+- Supports **multiple rooms and devices** using the **MQTT protocol**.
+- Easily adaptable for **larger buildings or campuses**.
+
+---
+## Future Enhancements
+- **User Authentication**: Adding login functionality for security.
+- **Dynamic Pricing**: Charging based on power usage.
+- **Remote Power Control**: Allowing admins to manually enable/disable power.
+- **Detailed Analytics**: Monitoring power consumption trends.
+
+---
